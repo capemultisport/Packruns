@@ -30,20 +30,29 @@
             document.getElementById('displayRow').innerText = "Registering Row: " + row;
         }
 
-        function submitForm() {
-            const name = document.getElementById('nameInput').value.trim();
-            if (!name) {
-                alert("Please enter your name now.");
-                return;
-            }
+function submitForm() {
+    const name = document.getElementById('nameInput').value.trim();
+    if (!name) return alert("Please enter your name.");
 
-            // YOUR GOOGLE SCRIPT URL
-            const googleUrl = "https://script.google.com/macros/s/AKfycbya62NsMcBbh0DZNTTnpkLC1CFkjtu4ayRBFWgatIH6ZFhgY9OIbxUJjCCqIn32-BXQfA/exec";
-            
-            // Redirecting the user to Google with the data as parameters
-            const finalUrl = `${googleUrl}?row=${row}&name=${encodeURIComponent(name)}`;
-            window.location.href = finalUrl;
-        }
+    const row = new URLSearchParams(window.location.search).get('row');
+    const googleUrl = "https://script.google.com/macros/s/AKfycbya62NsMcBbh0DZNTTnpkLC1CFkjtu4ayRBFWgatIH6ZFhgY9OIbxUJjCCqIn32-BXQfA/exec";
+    
+    // 1. Create a hidden iframe
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.name = 'hidden_iframe';
+    document.body.appendChild(iframe);
+
+    // 2. Point the URL to the iframe
+    // We add a 'callback' to tell Google we don't need a UI
+    const finalUrl = `${googleUrl}?row=${row}&name=${encodeURIComponent(name)}`;
+    
+    // 3. Open the link in the hidden iframe
+    window.open(finalUrl, 'hidden_iframe');
+
+    // 4. Show success on the GitHub page immediately
+    document.querySelector('.card').innerHTML = "<h2>✅ Submitted!</h2><p>You can close this window now.</p>";
+}
     </script>
 </body>
 </html>
