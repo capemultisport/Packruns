@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Your Spot</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); width: 90%; max-width: 400px; text-align: center; }
+        h2 { color: #1a73e8; margin-bottom: 8px; }
+        p { color: #5f6368; margin-bottom: 24px; }
+        input { width: 100%; padding: 14px; margin-bottom: 16px; border: 1px solid #dadce0; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background-color: #1a73e8; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+        button:active { background-color: #174ea6; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2 id="displayRow">Registration</h2>
+        <p>Please enter your name below.</p>
+        <input type="text" id="nameInput" placeholder="Your Name" autofocus>
+        <button onclick="submitForm()">Confirm & Save</button>
+    </div>
+
+    <script>
+        // Extract 'row' from URL: ?row=5
+        const params = new URLSearchParams(window.location.search);
+        const row = params.get('row');
+        if (row) {
+            document.getElementById('displayRow').innerText = "Registering Row " + row;
+        }
+
+        function submitForm() {
+            const name = document.getElementById('nameInput').value.trim();
+            if (!name) {
+                alert("Please enter your name.");
+                return;
+            }
+
+            // YOUR GOOGLE SCRIPT URL
+            const googleUrl = "https://script.google.com/macros/s/AKfycbya62NsMcBbh0DZNTTnpkLC1CFkjtu4ayRBFWgatIH6ZFhgY9OIbxUJjCCqIn32-BXQfA/exec";
+            
+            // Redirecting the user to Google with the data as parameters
+            const finalUrl = `${googleUrl}?row=${row}&name=${encodeURIComponent(name)}`;
+            window.location.href = finalUrl;
+        }
+    </script>
+</body>
+</html>
